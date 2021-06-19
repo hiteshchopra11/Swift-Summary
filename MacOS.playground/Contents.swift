@@ -239,9 +239,117 @@ print(array1)
 // Inserting array at a specific position
 array1.insert(30, at: 2)
 
+// Removing arrays
+array1.remove(at: 2)
+
+// Changing more than 1 array elements
+array1[0...2] = [1,2,3]
+
 // Accessing Arrays
 print("Index 0 : \(array1[0])")
 
 // Getting length of an array
 print("Length : \(array1.count)")
 print(array1)
+
+// Fill array with repeating values
+var array2 = Array(repeating: 15, count: 5)
+
+// Combining arrays
+var array3 = array1+array2
+
+// Get Index and value of arrays
+for (index,value) in array3.enumerated(){
+    print("Index is \(index) and value is \(value)")
+}
+
+// Array Contains
+print("3? : \(array3.contains(3))")
+
+// Get minimum and maximum values in array
+print("Min : \(array3.min()!)")
+print("Max : \(array3.max()!)")
+
+// Sort Array
+array3.sort()
+array3.sort{$0 > $1}
+
+// Multi dimensional arrays and accessing them
+var array4 = [[1,2,3],[4,5,6],[7,8,9]]
+print("Array : \(array4[1][0])")
+
+// Apart from this we can apply functions such as map
+// and filter to filter or combine our array
+
+/* Note-: Optional or ! is the object that has the option of
+ either containing no value" */
+
+
+// Dictionaries are unordered list of key value pairs
+var dict1 = [Int : String]()
+dict1[0] = "Hitesh Chopra"
+var cust :[String:String] = ["1":"John","2":"Charles","3":"Parry"]
+cust["2"]="Cormen"
+
+for (key,value) in cust{
+    print("\(key) : \(value)")
+}
+
+
+// Strings always contains text and escape characters
+var str1 = "A String\n"
+
+// Multiline Strings
+var str2 = """
+This is au
+multiline String
+in Swift Language
+aeio
+"""
+print(str2)
+
+// Combine string
+var combineString = str1 + str2 + "Hello world"
+print(combineString)
+
+// Fetch first character of a string
+print("First is \(str1[str1.startIndex])")
+
+// Fetch nth character of a string
+print("Fifth is \(str1[str1.index(str1.startIndex, offsetBy: 3)])")
+
+// Check if any character is there inside a string
+print("A in string : \(str1.contains("A"))")
+
+//Check for vowels/multiple characters in String
+print("Vowels : \(str2.contains{"aeiou".contains($0)})")
+
+// Get first 3 character of the string
+print("1st 3 charcters are-: \(String(str2.prefix(3)))")
+
+// Split everywhere there is a space
+let splitArray = str2.split{$0 == "\n"}
+print(splitArray[0])
+
+// Tuples can contain multiple values of different data types
+var tuple1 :(String,Int) = ("Age",45)
+var s1:String
+var s2:Int
+(s1,s2) = tuple1
+print("\(tuple1.0) \(tuple1.1) \(s1) \(s2)")
+
+// Assign labels to elements
+var t3 : (city:String,state:String) = ("Chandigarh","Punjab")
+print("City is \(t3.city) and state is \(t3.state)")
+
+// Sets are unordered lists of unique items
+var nums = Set<Int>()
+nums.insert(1)
+var nums2 : Set<Int> = [1,2,3]
+
+// Remove a value
+nums2.remove(0)
+
+// Check if present or not
+print("3 ? \(nums2.contains(3))")
+
