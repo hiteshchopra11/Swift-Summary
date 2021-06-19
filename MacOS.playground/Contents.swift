@@ -353,3 +353,207 @@ nums2.remove(0)
 // Check if present or not
 print("3 ? \(nums2.contains(3))")
 
+// Filters
+let fnum = [1,2,3,4,5,6]
+
+// Filter everything which has an even value
+let evenFnums = fnum.filter{
+    (num:Int) in
+    return num%2==0
+}
+
+print(evenFnums)
+
+// Enums are used when we want to define types with limited number of cases
+enum Emotion{
+    case joy
+    case anger
+    case fear
+    case disgust
+}
+
+var feeling = Emotion.joy
+print(feeling)
+feeling = .anger
+print(feeling)
+
+/* Options is a type that can either have or not have a value
+ Variables in general cannot contain a nil value. In situations when
+ we cannot gaurantee that we have a value , we can use optionals. The
+ optional will have a value of nil up until the value is assigned.*/
+
+var oName:String? = "Hitesh"
+var oAge:Int? = nil
+oAge = 45
+if(oName != nil && oAge != nil){
+    let uName:String = oName!
+    let uAge:Int = oAge!
+    print("Hello \(uName) \(uAge)")
+}
+
+
+// Exception handling
+enum DivisionError : Error{
+    case DivideByZero
+}
+
+
+func divide(num1:Float,num2:Float)throws -> Float{
+    guard num2 != 0.0 else {
+        throw DivisionError.DivideByZero
+    }
+    return num1/num2
+}
+
+do {
+    try divide(num1: 10, num2: 0)
+} catch DivisionError.DivideByZero{
+    print("Not possible to divide by zero mate")
+}
+
+
+// Structs
+
+struct Rectangle {
+    var height = 0.0
+    var length = 0.0
+    func area() -> Double {
+        let area = height * length
+        return area
+    }
+}
+
+let myRect = Rectangle(height:10.0,length:5.0)
+print("Area : \(myRect.height) * \(myRect.length) = \(myRect.area())")
+
+/* Classes-: The difference between classes and structs in swift is that classes can
+ inherit or extend other classes unlike structs */
+
+class Warrior {
+    var name:String = "Warrior"
+    var health:Int = 100
+    var attackMax:Int = 10
+    var blockMax:Int = 10
+    
+    init(_ name:String,_ health:Int, _ attackMax:Int, _ blockMax:Int){
+        // Use self to refer to the object's name
+        self.name = name
+        self.health = health
+        self.attackMax = attackMax
+        self.blockMax = blockMax
+    }
+    
+    func attack() -> Int{
+        return Int.random(in: 1...self.attackMax)
+    }
+    
+    func block() -> Int{
+        return Int.random(in: 1...self.blockMax)
+    }
+}
+
+class Battle {
+    func startFight(_ warrior1 :Warrior, _ warrior2 :Warrior){
+        while true {
+            if(Battle.getAttackResolved(warrior1, warrior2)=="Game Over"){
+                print("Game Over")
+                break;
+            }
+            if(Battle.getAttackResolved(warrior2, warrior1)=="Game Over"){
+                print("Game Over")
+                break;
+            }
+        }
+    }
+    
+    static func getAttackResolved(_ warriorA :Warrior, _ warriorB:Warrior)->String{
+        let warriorAAtackAmt:Int = warriorA.attack()
+        let warriorBBlockAmt:Int = warriorB.block()
+        var damage2WB:Int = warriorAAtackAmt-warriorBBlockAmt
+        damage2WB = damage2WB <= 0 ? 0 :damage2WB
+        warriorB.health = warriorB.health - damage2WB
+        print("\(warriorA.name) attacks \(warriorB.name) and deals \(damage2WB) damage")
+        print("\(warriorB.name) is down to \(warriorA.health)")
+        if(warriorB.health<=0){
+            print("\(warriorB.name) has Died and \(warriorA.name) is Victorious")
+            return "Game Over"
+        }else{
+            return "Fight Again"
+        }
+    }
+}
+
+/* Inheritance
+ Protocols are like interfaces in other classes and th way they work
+ is when a class adopts a protocol, it agrees to define any behaviour
+ that is defined inside of our protocol */
+
+protocol Teleports{
+    func teleport() ->String
+}
+
+class CanTeleport : Teleports {
+    func teleport() -> String {
+        return "Teleports Away"
+    }
+}
+
+class CantTeleport:Teleports{
+    func teleport() -> String {
+        return "Failed to teleport"
+    }
+}
+
+class MagicWarrior:Warrior{
+    var teleportChance :Int  = 0
+    var teleportType = CantTeleport()
+    init(_ name:String,_ health:Int, _ attackMax:Int, _ blockMax:Int, _ teleportChance:Int){
+        super.init(name, health, attackMax, blockMax)
+        self.teleportChance = teleportChance
+    }
+    override func block() ->Int{
+        let rndDodge = Int.random(in: 1...100)
+        if rndDodge<self.teleportChance{
+            print(self.name + " " + teleportType.teleport())
+            return 10000
+        } else{
+            return super.block()
+        }
+    }
+}
+let thor = Warrior("Thor",80,26,10)
+let loki = MagicWarrior("Loki",50,20,10,50)
+let battle = Battle()
+battle.startFight(thor, loki)
+
+/* Extensions are used to add functionalities to existing classes, enums, protocols
+ but they cannot be used to override existing functions */
+
+extension Double{
+    var km: Double { return self }
+    var m: Double { return self * 1000.0 }
+    var cm: Double { return self * 100.0 }
+}
+
+let km = 4.3
+let m = km.m
+print("\(km) km =  \(m) meters")
+
+/* Generics is the placeholder type in which data type will be assigned later based
+   on what type of data type we are working with */
+protocol Summable {
+    static func +(x:Self,y:Self) -> Self
+}
+
+extension Int:Summable{}
+extension Double:Summable{}
+extension String :Summable{}
+
+// T here is the generic parameter
+func sum<T:Summable>(_ x:T, _ y:T) -> T{
+    return x + y
+}
+
+print("10 + 20 = \(sum(10, 20))")
+print("4.6 + 5.4 = \(sum(4.6, 5.4))")
+print("Hitesh + Chopra = \(sum("Hitesh","Chopra"))")
